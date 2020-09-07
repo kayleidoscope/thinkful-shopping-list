@@ -1,27 +1,31 @@
-$(function () {
-    //when the shopping list form is submitted, do the following
-    $('.js-shopping-list-form').submit(event => {
-        // stop the default form submission behavior
-        event.preventDefault();
-        // put new item from input into a variable
-        const newItem = $(event.currentTarget).find(`#shopping-list-entry`);
-        // append the new item onto the shopping list ul
-        $(".shopping-list").append(`<li>${newItem}</li>`);
-    })
-})
+function handleSubmit (event) {
+    event.preventDefault()
+    const newItem = $(this).find(`#shopping-list-entry`).val();
+    const html = `<li>
+          <span class='shopping-item'>${newItem}</span>
+          <div class="shopping-item-controls">
+            <button class="shopping-item-toggle">
+              <span class="button-label">check</span>
+            </button>
+            <button class="shopping-item-delete">
+              <span class="button-label">delete</span>
+            </button>
+          </div>
+        </li>`
+    $(".shopping-list").append(html);
+  }
+  
+  function handleCheck(event) {
+    $(this).closest('li').find('.shopping-item').toggleClass('shopping-item__checked')
+  }
+  
+  function handleDelete(event){
+    $(this).closest('li').remove();
+  }
 
-$(function () {
-    // when the "Check" botton is clicked, do the following
-    $('button .shopping-item-toggle').on("click", (function(event) {
-        //toggle the class of the closest span
-        $(event.currentTarget).closest('span').toggleClass('shopping-item_checked');
-    })
-)});
-
-
-$(function () {
-    //when the "Delete" button is clicked, do the following
-    $('button .shopping-item-delete').on("click", (function(event) {
-        $('.shopping-list').removeChild();
-    }))
-})
+  $(function() {
+    $("form").on("submit",handleSubmit);
+    $("ul").on("click", ".shopping-item-toggle", handleCheck);
+    $("ul").on("click", ".shopping-item-delete", handleDelete);
+  })
+  
